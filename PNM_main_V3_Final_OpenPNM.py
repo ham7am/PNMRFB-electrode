@@ -109,20 +109,20 @@ import Custom_functions_pressure_fitting as cf_pres_fit
 # Setting import network directory
 cwd = os.getcwd()                               # Curent Working directory
 network_path = '\\input\\'                      # Folder containing network
-network_name = 'Freudenberg_check_CSV'          # Name of the network 
+network_name = 'ff_freudenberg'                 # Name of the network 
 
 # Setting file path directories for loading in networks
 path_net = cwd + network_path + network_name
 file_vec = [path_net]
 
 # Setting exporting folder directory and simulation name
-Output_folder = 'File_Name'                     # Output folder 
-name0_vec = ['_']                               # Simulation name
+Output_folder = 'Output_name'                     # Output folder 
+name0_vec = ['_']                               # Simulation name   
 
 # Setting simulation parameters
 v_in_vec = [1.5e-2]                             # Inlet velocities [m/s]    
 j0_vec = [310]                              # Current densities [A/m2]  
-vel_ind = 0                                     # Velocity index for associating exchange current density with a velocity
+vel_ind = 0                                     # Velocity index for associating exchange current density with a velocity  
 
 """----------Loading in the Network and simulation constants----------------"""
 for NrNetwork, file in enumerate(file_vec):
@@ -132,7 +132,7 @@ for NrNetwork, file in enumerate(file_vec):
         
         # Create output directory for saving the .VTK files. These are created 
         # within the folder ".\\output\\Output_folder" where Output_folder is set above.
-        os.mkdir('.\\output\\' + Output_folder + '\\' + name)  
+        os.makedirs('.\\output\\' + Output_folder + '\\' + name, exist_ok = True)  
         starting_time = time.time()
         op.Workspace().clear()  
         
@@ -177,7 +177,7 @@ for NrNetwork, file in enumerate(file_vec):
         H_a_min = np.amin(net_a['pore.coords'][net_a.pores(), H_dim])
         W_a = np.amax(net_a['pore.coords'][net_a.pores(), W_dim])
         
-        # Assign the labels 'membrane', 'current collector' 'flow inlet' and 'flow outlet'
+        # Assign the labels 'membrane', 'current collector' 'flow inlet' and 'flow outlet' #TODO: fix this in my topography code so this isnt actually needed
         # To the correct boundary pores.
         if Flow_field == 0:
             cf.assign_boundary_pores(net_c, W_dim, L_dim)
@@ -1020,7 +1020,7 @@ for NrNetwork, file in enumerate(file_vec):
                             op.io.project_to_vtk(project = pn_ano_vtk.project, filename = '.\\output\\' + Output_folder + '\\' + name + '\\anode_' + str(E_cell)[0:2] + '_' + str(E_cell)[3:] + 'V'+ 'network' + str(network))
                             op.io.project_to_csv(project = pn_cat_vtk.project, filename = '.\\output\\' + Output_folder + '\\' + name + '\\cathode_' + str(E_cell)[0:2] + '_' + str(E_cell)[3:] + 'V_' + 'network' + str(network) )
                             op.io.project_to_csv(project = pn_ano_vtk.project, filename = '.\\output\\' + Output_folder + '\\' + name + '\\anode_' + str(E_cell)[0:2] + '_' + str(E_cell)[3:] + 'V'+ 'network' + str(network))
-                            
+                            op.Workspace().save_project(project = pn_cat_vtk.project, filename='please_have_stuff.pnm')
                         break
         
         wb.save(filename = '.\\output\\' + Output_folder + '\\' + name + 'polarizationCurveData.xlsx')

@@ -35,14 +35,15 @@ def assign_boundary_pores(net, W_dim, L_dim):
     
     if W_dim == 0:
         net['pore.membrane'] = net['pore.left']
-        net['pore.current_collector'] = net['pore.right']
+        # net['pore.current_collector'] = net['pore.right']
     elif W_dim == 1:
         net['pore.membrane'] = net['pore.front']
-        net['pore.current_collector'] = net['pore.back']
+        # net['pore.current_collector'] = net['pore.back']
     elif W_dim == 2:
-        net['pore.membrane'] = net['pore.top']
-        net['pore.current_collector'] =  net['pore.bottom']
+        net['pore.membrane'] = net['pore.top'] 
+        # net['pore.current_collector'] =  net['pore.bottom'] # FIX: removed current collector labelling here too cuz its bad 
     
+    # FIX: Removed these labels since they dont make sense
     if L_dim == 0:
         net['pore.flow_inlet'] = net['pore.left']
         net['pore.flow_outlet'] = net['pore.right']
@@ -105,7 +106,7 @@ def assign_boundary_pores_IDFF(net, W_dim, L_dim, H_dim, H, H_min, Inlet_channel
         net.set_label(label='height_1', pores = Inlet_heigth_pores)
         Inlet_mask_left = net.pores(['height_1', 'left'], mode='and')
         Inlet_pores = net.pores('all')[Inlet_mask_left]
-        net.set_label(label = 'flow_inlet', pores=Inlet_pores)
+        # net.set_label(label = 'flow_inlet', pores=Inlet_pores) #FIX: commented out
     
         Rib_mask_boolean = np.logical_and(net['pore.coords'][net.pores(), H_dim] > Heigth_1,
                                     net['pore.coords'][net.pores(), H_dim] <= Heigth_2)
@@ -114,7 +115,7 @@ def assign_boundary_pores_IDFF(net, W_dim, L_dim, H_dim, H, H_min, Inlet_channel
         net.set_label(label='height_2', pores = Rib_heigth_pores)
         Rib_mask_left = net.pores(['height_2', 'left'], mode='and')
         Rib_pores = net.pores('all')[Rib_mask_left]
-        net.set_label(label = 'pore.current_collector', pores=Rib_pores)
+        # net.set_label(label = 'pore.current_collector', pores=Rib_pores) # Commented out because its not required anymore
     
         Outlet_mask_boolean = np.logical_and(net['pore.coords'][net.pores(), H_dim] > Heigth_2,
                                     net['pore.coords'][net.pores(), H_dim] <= Heigth_3)
@@ -123,14 +124,14 @@ def assign_boundary_pores_IDFF(net, W_dim, L_dim, H_dim, H, H_min, Inlet_channel
         net.set_label(label='height_3', pores = Outlet_heigth_pores)
         Outlet_mask_left = net.pores(['height_3', 'left'], mode='and')
         Outlet_pores = net.pores('all')[Outlet_mask_left]
-        net.set_label(label = 'pore.flow_outlet', pores=Outlet_pores)
+        # net.set_label(label = 'pore.flow_outlet', pores=Outlet_pores) #FIX: commented out
         
     # In case of using Flow field pores
-    elif Inlet_channel == 1:           
-        net.set_label(label = 'flow_inlet', pores=net.pores('Boundary_FF_inlet_bottom'))
-        net.set_label(label = 'pore.flow_outlet', pores=net.pores('Boundary_FF_outlet_top'))
+    # elif Inlet_channel == 1:           
+    #     net.set_label(label = 'flow_inlet', pores=net.pores('Boundary_FF_inlet_bottom'))
+    #     net.set_label(label = 'pore.flow_outlet', pores=net.pores('Boundary_FF_outlet_top'))
         
-    net['pore.membrane'] = net['pore.right']
+    net['pore.membrane'] = net['pore.left']
     
     
 def add_throat_surface_area_to_pores(net):

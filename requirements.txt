@@ -1,6 +1,7 @@
 docrep==0.3.2
 chemicals==1.1.4
 pyamg==4.2.3
+fluids==1.1.0
 thermo==0.2.26
 transforms3d==0.3.1
 pypardiso==0.3.3
