@@ -1,3 +1,4 @@
 *.vtp
 *.csv
 *.xlsx
+*.pyc
