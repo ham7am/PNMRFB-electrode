@@ -106,6 +106,21 @@ import Custom_functions_transport as cf_trans
 import Custom_functions_phase as cf_phase
 import Custom_functions_pressure_fitting as cf_pres_fit  
 
+import warnings
+import sys
+
+def custom_warning(message, category, filename, lineno, file=None, line=None):
+    import traceback
+    print(f"\n{'='*80}")
+    print(f"WARNING: {category.__name__}: {message}")
+    print(f"Location: {filename}:{lineno}")
+    print(f"{'='*80}")
+    print("FULL STACK TRACE:")
+    traceback.print_stack(limit=20)
+    print(f"{'='*80}\n")
+
+warnings.showwarning = custom_warning
+
 # Setting import network directory
 cwd = os.getcwd()                               # Curent Working directory
 network_path = '\\input\\'                      # Folder containing network

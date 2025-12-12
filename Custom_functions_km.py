@@ -44,15 +44,15 @@ def assign_boundary_pores(net, W_dim, L_dim):
         # net['pore.current_collector'] =  net['pore.bottom'] # FIX: removed current collector labelling here too cuz its bad 
     
     # FIX: Removed these labels since they dont make sense
-    if L_dim == 0:
-        net['pore.flow_inlet'] = net['pore.left']
-        net['pore.flow_outlet'] = net['pore.right']
-    elif L_dim == 1:
-        net['pore.flow_inlet'] = net['pore.front']
-        net['pore.flow_outlet'] = net['pore.back']
-    elif L_dim == 2:
-        net['pore.flow_inlet'] = net['pore.bottom']
-        net['pore.flow_outlet'] = net['pore.top']
+    # if L_dim == 0:
+    #     net['pore.flow_inlet'] = net['pore.left']
+    #     net['pore.flow_outlet'] = net['pore.right']
+    # elif L_dim == 1:
+    #     net['pore.flow_inlet'] = net['pore.front']
+    #     net['pore.flow_outlet'] = net['pore.back']
+    # elif L_dim == 2:
+    #     net['pore.flow_inlet'] = net['pore.bottom']
+    #     net['pore.flow_outlet'] = net['pore.top']
 
 
 def assign_boundary_pores_IDFF(net, W_dim, L_dim, H_dim, H, H_min, Inlet_channel):
@@ -329,7 +329,8 @@ def inlet_pressure_V3(P_in, alg, Q_desired, inlet_throats, inlet_pores, net, pha
     r''' inlet_pressure is used as a target function to find the required inlet pressure
     in every pore to match the desired inlet flow rate Q_desired'''
     
-    alg.set_value_BC(pores = net.pores('internal', mode = 'nor'), mode='remove')
+    alg.set_value_BC(pores = net.pores('ff_internal', mode = 'nor'), mode='remove') # FIX?: change label from 'internal' to 'ff_internal'. 
+    # rationale: maybe this just expects internal electrode pores but once we removed flow_inlet/outlet it got stuck in a loop cuz where are we fr. so we make a new label to point it in the right spot?
     alg.set_value_BC(values = 0.0, pores=outlet_pores, mode='overwrite') # Dirichlet boundary inlet condition
     alg.set_value_BC(values=P_in, pores=inlet_pores, mode='overwrite') # Dirichlet boundary inlet condition
     alg.run()
